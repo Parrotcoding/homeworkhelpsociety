@@ -1,15 +1,58 @@
-<script>
-  function openShell() {
-    let url = document.getElementById('urlInput').value.trim();
-    if (!url) return;
-    if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sleek Proxy</title>
+  <style>
+    body {
+      background: #0e0e0e;
+      color: white;
+      font-family: sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+    }
+    form {
+      display: flex;
+      gap: 10px;
+    }
+    input, button {
+      padding: 0.7rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 999px;
+      border: none;
+    }
+    input {
+      width: 300px;
+      outline: none;
+    }
+    button {
+      background: #1e90ff;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <form onsubmit="openShell(); return false;">
+    <input id="urlInput" placeholder="example.com or https://..." />
+    <button type="submit">Launch</button>
+  </form>
 
-    const win = window.open('about:blank');
-    const escapedUrl = encodeURIComponent(url);
+  <script>
+    function openShell() {
+      let url = document.getElementById('urlInput').value.trim();
+      if (!url) return;
+      if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
 
-    const doc = win.document;
-    doc.open();
-    doc.write(`<!DOCTYPE html>
+      const win = window.open('about:blank');
+      const escapedUrl = encodeURIComponent(url);
+
+      const doc = win.document;
+      doc.open();
+      doc.write(`<!DOCTYPE html>
 <html>
 <head>
   <title>Proxy Shell</title>
@@ -54,7 +97,7 @@
 <body>
   <form onsubmit="loadProxy(); return false;">
     <input id="urlBar" placeholder="Enter URL..." />
-    <button>Go</button>
+    <button type="submit">Go</button>
   </form>
   <iframe id="proxyFrame"></iframe>
   <script>
@@ -68,6 +111,8 @@
   <\/script>
 </body>
 </html>`);
-    doc.close();
-  }
-</script>
+      doc.close();
+    }
+  </script>
+</body>
+</html>
