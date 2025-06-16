@@ -6,14 +6,22 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/proxy', createProxyMiddleware({
-  target: '',
+  target: 'https://example.com',
   changeOrigin: true,
-  pathRewrite: (path, req) => {
-    const url = new URL(req.query.url);
-    req.headers.host = url.host;
-    return url.pathname + url.search;
+  selfHandleResponse: false,
+  secure: false,
+  logLevel: 'warn',
+  router: req => {
+    let targetUrl = req.query.url;
+    if (!/^https?:\/\//i.test(targetUrl)) {
+      targetUrl = 'https://' + targetUrl;
+    }
+    return targetUrl;
   },
-  router: req => req.query.url
+  pathRewrite: (path, req) => {
+    const target = new URL(req.query.url);
+    return target.pathname + target.search;
+  }
 }));
 
 const PORT = process.env.PORT || 3000;
