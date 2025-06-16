@@ -2,45 +2,109 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Simple Proxy</title>
+  <title>Sleek Proxy</title>
   <style>
     body {
+      background: #0e0e0e;
+      color: white;
       font-family: sans-serif;
-      background: #111;
-      color: #fff;
       height: 100vh;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
     }
     input, button {
-      padding: 0.75rem;
+      padding: 0.7rem 1.2rem;
       font-size: 1rem;
+      border-radius: 999px;
       border: none;
-      border-radius: 6px;
     }
     input {
       width: 300px;
+      outline: none;
     }
     button {
       background: #1e90ff;
       color: white;
+      cursor: pointer;
       margin-left: 10px;
     }
   </style>
 </head>
 <body>
-  <form onsubmit="event.preventDefault(); go();">
-    <input id="url" placeholder="Enter URL like https://example.com" />
-    <button type="submit">Go</button>
+  <form onsubmit="openShell(); return false;">
+    <input id="urlInput" placeholder="example.com or https://..." />
+    <button>Launch</button>
   </form>
 
   <script>
-    function go() {
-      const input = document.getElementById('url').value;
-      if (input) {
-        window.location.href = `/proxy?url=${encodeURIComponent(input)}`;
-      }
+    function openShell() {
+      let url = document.getElementById('urlInput').value.trim();
+      if (!url) return;
+      if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+      const win = window.open('about:blank');
+      win.document.write(`
+        <html>
+          <head>
+            <title>Proxy</title>
+            <style>
+              body {
+                background: #0d0d0d;
+                margin: 0;
+                font-family: sans-serif;
+                color: white;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+              }
+              form {
+                margin: 20px;
+                display: flex;
+              }
+              input, button {
+                padding: 0.7rem 1.2rem;
+                font-size: 1rem;
+                border-radius: 999px;
+                border: none;
+              }
+              input {
+                width: 300px;
+                outline: none;
+              }
+              button {
+                background: #1e90ff;
+                color: white;
+                cursor: pointer;
+                margin-left: 10px;
+              }
+              iframe {
+                border: none;
+                width: 100vw;
+                height: 100vh;
+                flex-grow: 1;
+              }
+            </style>
+          </head>
+          <body>
+            <form onsubmit="loadProxy(); return false;">
+              <input id='urlBar' placeholder='Enter URL...' />
+              <button>Go</button>
+            </form>
+            <iframe id='proxyFrame'></iframe>
+            <script>
+              const iframe = document.getElementById('proxyFrame');
+              function loadProxy() {
+                let u = document.getElementById('urlBar').value.trim();
+                if (!/^https?:\\/\\//i.test(u)) u = 'https://' + u;
+                iframe.src = '/proxy?url=' + encodeURIComponent(u);
+              }
+              // load initial URL
+              document.getElementById('urlBar').value = "${url}";
+              loadProxy();
+            </script>
+          </body>
+        </html>
+      `);
     }
   </script>
 </body>
