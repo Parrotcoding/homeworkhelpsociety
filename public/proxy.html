@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Proxy</title>
+  <style>
+    body {
+      background: #0e0e0e;
+      color: white;
+      font-family: sans-serif;
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    form, .widgets {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 1rem;
+    }
+
+    input, button {
+      padding: 0.7rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 999px;
+      border: none;
+    }
+
+    input {
+      width: 300px;
+      outline: none;
+    }
+
+    .search-btn {
+      background: #1e90ff;
+      color: white;
+      cursor: pointer;
+    }
+
+    .widget-btn {
+      background: #222;
+      color: white;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .widget-btn:hover {
+      background: #444;
+    }
+  </style>
+</head>
+<body>
+  <form onsubmit="openShell(); return false;">
+    <input id="urlInput" placeholder="example.com or https://..." />
+    <button class="search-btn" type="submit">Launch</button>
+  </form>
+
+  <div class="widgets">
+    <button class="widget-btn" onclick="openShell('https://www.google.com')">🔍 Google</button>
+    <button class="widget-btn" onclick="openShell('https://duckduckgo.com')">🦆 DuckDuckGo</button>
+    <button class="widget-btn" onclick="openShell('https://poki.com')">🎮 Games</button>
+  </div>
+
+  <script>
+    function openShell(customUrl = null) {
+      let url = customUrl || document.getElementById('urlInput').value.trim();
+      if (!url) return;
+      if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+
+      const win = window.open('about:blank');
+      const escapedUrl = encodeURIComponent(url);
+
+      const doc = win.document;
+      doc.open();
+      doc.write(`<!DOCTYPE html>
+<html>
+<head>
+  <title>Proxy Shell</title>
+  <style>
+    body {
+      background: #0d0d0d;
+      margin: 0;
+      font-family: sans-serif;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    form {
+      margin: 20px;
+      display: flex;
+    }
+    input, button {
+      padding: 0.7rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 999px;
+      border: none;
+    }
+    input {
+      width: 300px;
+      outline: none;
+    }
+    button {
+      background: #1e90ff;
+      color: white;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    iframe {
+      border: none;
+      width: 100vw;
+      height: 100vh;
+      flex-grow: 1;
+    }
+  </style>
+</head>
+<body>
+  <form onsubmit="loadProxy(); return false;">
+    <input id="urlBar" placeholder="Enter URL..." />
+    <button type="submit">Go</button>
+  </form>
+  <iframe id="proxyFrame"></iframe>
+  <script>
+    function loadProxy() {
+      let u = document.getElementById('urlBar').value.trim();
+      if (!/^https?:\\/\\//i.test(u)) u = 'https://' + u;
+      document.getElementById('proxyFrame').src = '/proxy?url=' + encodeURIComponent(u);
+    }
+    document.getElementById('urlBar').value = decodeURIComponent("${escapedUrl}");
+    loadProxy();
+  <\/script>
+</body>
+</html>`);
+      doc.close();
+    }
+  </script>
+</body>
+</html>
