@@ -1,111 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Sleek Proxy</title>
-  <style>
-    body {
-      background: #0e0e0e;
-      color: white;
-      font-family: sans-serif;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    input, button {
-      padding: 0.7rem 1.2rem;
-      font-size: 1rem;
-      border-radius: 999px;
-      border: none;
-    }
-    input {
-      width: 300px;
-      outline: none;
-    }
-    button {
-      background: #1e90ff;
-      color: white;
-      cursor: pointer;
-      margin-left: 10px;
-    }
-  </style>
-</head>
-<body>
-  <form onsubmit="openShell(); return false;">
-    <input id="urlInput" placeholder="example.com or https://..." />
-    <button>Launch</button>
-  </form>
+<script>
+  function openShell() {
+    let url = document.getElementById('urlInput').value.trim();
+    if (!url) return;
+    if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
 
-  <script>
-    function openShell() {
-      let url = document.getElementById('urlInput').value.trim();
-      if (!url) return;
-      if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
-      const win = window.open('about:blank');
-      win.document.write(`
-        <html>
-          <head>
-            <title>Proxy</title>
-            <style>
-              body {
-                background: #0d0d0d;
-                margin: 0;
-                font-family: sans-serif;
-                color: white;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-              }
-              form {
-                margin: 20px;
-                display: flex;
-              }
-              input, button {
-                padding: 0.7rem 1.2rem;
-                font-size: 1rem;
-                border-radius: 999px;
-                border: none;
-              }
-              input {
-                width: 300px;
-                outline: none;
-              }
-              button {
-                background: #1e90ff;
-                color: white;
-                cursor: pointer;
-                margin-left: 10px;
-              }
-              iframe {
-                border: none;
-                width: 100vw;
-                height: 100vh;
-                flex-grow: 1;
-              }
-            </style>
-          </head>
-          <body>
-            <form onsubmit="loadProxy(); return false;">
-              <input id='urlBar' placeholder='Enter URL...' />
-              <button>Go</button>
-            </form>
-            <iframe id='proxyFrame'></iframe>
-            <script>
-              const iframe = document.getElementById('proxyFrame');
-              function loadProxy() {
-                let u = document.getElementById('urlBar').value.trim();
-                if (!/^https?:\\/\\//i.test(u)) u = 'https://' + u;
-                iframe.src = '/proxy?url=' + encodeURIComponent(u);
-              }
-              // load initial URL
-              document.getElementById('urlBar').value = "${url}";
-              loadProxy();
-            </script>
-          </body>
-        </html>
-      `);
-    }
-  </script>
-</body>
-</html>
+    const win = window.open('about:blank');
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Proxy</title>
+        <style>
+          body {
+            background: #0d0d0d;
+            margin: 0;
+            font-family: sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+          form {
+            margin: 20px;
+            display: flex;
+          }
+          input, button {
+            padding: 0.7rem 1.2rem;
+            font-size: 1rem;
+            border-radius: 999px;
+            border: none;
+          }
+          input {
+            width: 300px;
+            outline: none;
+          }
+          button {
+            background: #1e90ff;
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
+          }
+          iframe {
+            border: none;
+            width: 100vw;
+            height: 100vh;
+            flex-grow: 1;
+          }
+        </style>
+      </head>
+      <body>
+        <form onsubmit="loadProxy(); return false;">
+          <input id="urlBar" placeholder="Enter URL..." />
+          <button>Go</button>
+        </form>
+        <iframe id="proxyFrame"></iframe>
+        <script>
+          const iframe = document.getElementById('proxyFrame');
+          function loadProxy() {
+            let u = document.getElementById('urlBar').value.trim();
+            if (!/^https?:\\/\\//i.test(u)) u = 'https://' + u;
+            iframe.src = '/proxy?url=' + encodeURIComponent(u);
+          }
+          document.getElementById('urlBar').value = ${JSON.stringify(url)};
+          loadProxy();
+        <\/script>
+      </body>
+      </html>
+    `;
+    win.document.open();
+    win.document.write(html);
+    win.document.close();
+  }
+</script>
