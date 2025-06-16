@@ -1,142 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Sleek Proxy</title>
+  <meta charset="UTF-8" />
+  <title>Middle School Math Help</title>
   <style>
     body {
-      background: #0e0e0e;
-      color: white;
       font-family: sans-serif;
-      height: 100vh;
+      background: #fefefe;
       margin: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      padding: 2rem;
+      line-height: 1.6;
     }
 
-    form, .widgets {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin: 1rem;
+    h1, h2 {
+      color: #2c3e50;
     }
 
-    input, button {
-      padding: 0.7rem 1.2rem;
-      font-size: 1rem;
-      border-radius: 999px;
-      border: none;
+    .topic {
+      margin-bottom: 2rem;
+      border-left: 4px solid #1abc9c;
+      padding-left: 1rem;
     }
 
-    input {
-      width: 300px;
-      outline: none;
-    }
-
-    .search-btn {
-      background: #1e90ff;
-      color: white;
-      cursor: pointer;
-    }
-
-    .widget-btn {
-      background: #222;
-      color: white;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .widget-btn:hover {
-      background: #444;
+    code {
+      background: #eee;
+      padding: 0.2rem 0.4rem;
+      border-radius: 6px;
     }
   </style>
 </head>
 <body>
-  <form onsubmit="openShell(); return false;">
-    <input id="urlInput" placeholder="example.com or https://..." />
-    <button class="search-btn" type="submit">Launch</button>
-  </form>
+  <h1>📘 Middle School Math Help</h1>
+  <p>Welcome! Here you'll find helpful explanations and examples for common math topics.</p>
 
-  <div class="widgets">
-    <button class="widget-btn" onclick="openShell('https://www.google.com')">🔍 Google</button>
-    <button class="widget-btn" onclick="openShell('https://duckduckgo.com')">🦆 DuckDuckGo</button>
-    <button class="widget-btn" onclick="openShell('https://poki.com')">🎮 Games</button>
+  <div class="topic">
+    <h2>Fractions</h2>
+    <p>A fraction represents a part of a whole. For example, <code>3/4</code> means 3 parts out of 4.</p>
+    <p><strong>Tip:</strong> To add fractions, use a common denominator.</p>
+  </div>
+
+  <div class="topic">
+    <h2>Decimals</h2>
+    <p>Decimals are another way to represent parts of a whole. <code>0.5</code> is the same as <code>1/2</code>.</p>
+    <p><strong>Convert:</strong> To convert a fraction to a decimal, divide the numerator by the denominator.</p>
+  </div>
+
+  <div class="topic">
+    <h2>Percentages</h2>
+    <p>Percentages represent a value out of 100. For example, <code>25%</code> = <code>0.25</code> = <code>1/4</code>.</p>
+    <p><strong>Formula:</strong> <code>(Part ÷ Whole) × 100</code></p>
+  </div>
+
+  <div class="topic">
+    <h2>Order of Operations</h2>
+    <p>Remember PEMDAS: Parentheses, Exponents, Multiplication/Division, Addition/Subtraction.</p>
+    <p><strong>Example:</strong> <code>3 + 4 × (2 - 1)</code> = <code>3 + 4</code> = <code>7</code></p>
   </div>
 
   <script>
-    function openShell(customUrl = null) {
-      let url = customUrl || document.getElementById('urlInput').value.trim();
-      if (!url) return;
-      if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
-
-      const win = window.open('about:blank');
-      const escapedUrl = encodeURIComponent(url);
-
-      const doc = win.document;
-      doc.open();
-      doc.write(`<!DOCTYPE html>
-<html>
-<head>
-  <title>Proxy Shell</title>
-  <style>
-    body {
-      background: #0d0d0d;
-      margin: 0;
-      font-family: sans-serif;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    form {
-      margin: 20px;
-      display: flex;
-    }
-    input, button {
-      padding: 0.7rem 1.2rem;
-      font-size: 1rem;
-      border-radius: 999px;
-      border: none;
-    }
-    input {
-      width: 300px;
-      outline: none;
-    }
-    button {
-      background: #1e90ff;
-      color: white;
-      cursor: pointer;
-      margin-left: 10px;
-    }
-    iframe {
-      border: none;
-      width: 100vw;
-      height: 100vh;
-      flex-grow: 1;
-    }
-  </style>
-</head>
-<body>
-  <form onsubmit="loadProxy(); return false;">
-    <input id="urlBar" placeholder="Enter URL..." />
-    <button type="submit">Go</button>
-  </form>
-  <iframe id="proxyFrame"></iframe>
-  <script>
-    function loadProxy() {
-      let u = document.getElementById('urlBar').value.trim();
-      if (!/^https?:\\/\\//i.test(u)) u = 'https://' + u;
-      document.getElementById('proxyFrame').src = '/proxy?url=' + encodeURIComponent(u);
-    }
-    document.getElementById('urlBar').value = decodeURIComponent("${escapedUrl}");
-    loadProxy();
-  <\/script>
-</body>
-</html>`);
-      doc.close();
-    }
+    let typed = '';
+    document.addEventListener('keydown', (e) => {
+      typed += e.key.toLowerCase();
+      if (typed.includes('proxy')) {
+        alert("I solemnly swear I am up to no good.");
+        typed = ''; // reset
+      }
+      if (typed.length > 10) {
+        typed = typed.slice(-10);
+      }
+    });
   </script>
 </body>
 </html>
