@@ -5,70 +5,69 @@
     if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
 
     const win = window.open('about:blank');
-    const html = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Proxy</title>
-        <style>
-          body {
-            background: #0d0d0d;
-            margin: 0;
-            font-family: sans-serif;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-          }
-          form {
-            margin: 20px;
-            display: flex;
-          }
-          input, button {
-            padding: 0.7rem 1.2rem;
-            font-size: 1rem;
-            border-radius: 999px;
-            border: none;
-          }
-          input {
-            width: 300px;
-            outline: none;
-          }
-          button {
-            background: #1e90ff;
-            color: white;
-            cursor: pointer;
-            margin-left: 10px;
-          }
-          iframe {
-            border: none;
-            width: 100vw;
-            height: 100vh;
-            flex-grow: 1;
-          }
-        </style>
-      </head>
-      <body>
-        <form onsubmit="loadProxy(); return false;">
-          <input id="urlBar" placeholder="Enter URL..." />
-          <button>Go</button>
-        </form>
-        <iframe id="proxyFrame"></iframe>
-        <script>
-          const iframe = document.getElementById('proxyFrame');
-          function loadProxy() {
-            let u = document.getElementById('urlBar').value.trim();
-            if (!/^https?:\\/\\//i.test(u)) u = 'https://' + u;
-            iframe.src = '/proxy?url=' + encodeURIComponent(u);
-          }
-          document.getElementById('urlBar').value = ${JSON.stringify(url)};
-          loadProxy();
-        <\/script>
-      </body>
-      </html>
-    `;
-    win.document.open();
-    win.document.write(html);
-    win.document.close();
+    const escapedUrl = encodeURIComponent(url);
+
+    const doc = win.document;
+    doc.open();
+    doc.write(`<!DOCTYPE html>
+<html>
+<head>
+  <title>Proxy Shell</title>
+  <style>
+    body {
+      background: #0d0d0d;
+      margin: 0;
+      font-family: sans-serif;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    form {
+      margin: 20px;
+      display: flex;
+    }
+    input, button {
+      padding: 0.7rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 999px;
+      border: none;
+    }
+    input {
+      width: 300px;
+      outline: none;
+    }
+    button {
+      background: #1e90ff;
+      color: white;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    iframe {
+      border: none;
+      width: 100vw;
+      height: 100vh;
+      flex-grow: 1;
+    }
+  </style>
+</head>
+<body>
+  <form onsubmit="loadProxy(); return false;">
+    <input id="urlBar" placeholder="Enter URL..." />
+    <button>Go</button>
+  </form>
+  <iframe id="proxyFrame"></iframe>
+  <script>
+    function loadProxy() {
+      let u = document.getElementById('urlBar').value.trim();
+      if (!/^https?:\\/\\//i.test(u)) u = 'https://' + u;
+      document.getElementById('proxyFrame').src = '/proxy?url=' + encodeURIComponent(u);
+    }
+    document.getElementById('urlBar').value = decodeURIComponent("${escapedUrl}");
+    loadProxy();
+  <\/script>
+</body>
+</html>`);
+    doc.close();
   }
 </script>
