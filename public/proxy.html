@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <title>Proxy</title>
   <script>
-    // Redirect unauthorized access back to the homepage
     if (sessionStorage.getItem("unlocked") !== "true") {
       window.location.href = "index.html";
     }
@@ -76,7 +75,6 @@
       let url = customUrl || document.getElementById('urlInput').value.trim();
       if (!url) return;
 
-      // Smart URL handling
       if (!/^https?:\/\//i.test(url) && !url.includes(".")) {
         url = "https://www.google.com/search?q=" + encodeURIComponent(url);
       } else if (!/^https?:\/\//i.test(url)) {
@@ -91,22 +89,92 @@
       doc.write(`<!DOCTYPE html>
 <html>
 <head>
-  <title>Proxy Shell</title>
+  <title>Marauder's Proxy Shell</title>
   <style>
-    body { background: #0d0d0d; margin: 0; font-family: sans-serif; color: white; display: flex; flex-direction: column; align-items: center; }
-    form { margin: 20px; display: flex; }
-    input, button { padding: 0.7rem 1.2rem; font-size: 1rem; border-radius: 999px; border: none; }
-    input { width: 300px; outline: none; }
-    button { background: #1e90ff; color: white; cursor: pointer; margin-left: 10px; }
-    iframe { border: none; width: 100vw; height: 100vh; flex-grow: 1; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #0d0d0d;
+      color: white;
+      font-family: 'Georgia', serif;
+      overflow: hidden;
+    }
+
+    #unfoldShell {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100px;
+      height: 100px;
+      background: #151515;
+      border: 2px solid #333;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+      animation: unfold 1s ease-out forwards;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    @keyframes unfold {
+      0% {
+        width: 100px;
+        height: 100px;
+        transform: translate(0, 0) scale(0.2);
+        opacity: 0.2;
+      }
+      60% {
+        opacity: 1;
+      }
+      100% {
+        width: 100vw;
+        height: 100vh;
+        transform: translate(0, 0) scale(1);
+        border-radius: 0;
+      }
+    }
+
+    #proxyFrame {
+      flex-grow: 1;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    form {
+      margin: 10px;
+      display: flex;
+    }
+
+    input, button {
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 999px;
+      border: none;
+      outline: none;
+    }
+
+    input {
+      width: 280px;
+    }
+
+    button {
+      background: #1e90ff;
+      color: white;
+      margin-left: 8px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <form onsubmit="loadProxy(); return false;">
-    <input id="urlBar" placeholder="Enter URL..." />
-    <button type="submit">Go</button>
-  </form>
-  <iframe id="proxyFrame"></iframe>
+  <div id="unfoldShell">
+    <form onsubmit="loadProxy(); return false;">
+      <input id="urlBar" placeholder="Enter URL or search..." />
+      <button type="submit">Go</button>
+    </form>
+    <iframe id="proxyFrame"></iframe>
+  </div>
+
   <script>
     function loadProxy() {
       let u = document.getElementById('urlBar').value.trim();
