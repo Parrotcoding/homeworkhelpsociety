@@ -18,16 +18,6 @@
       color: #333;
     }
 
-    input {
-      border: 2px solid #ccc;
-      border-radius: 999px;
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      width: 300px;
-      display: block;
-      margin: 2rem auto;
-    }
-
     .doc {
       background: white;
       border: 1px solid #ddd;
@@ -53,31 +43,31 @@
   <div class="doc">
     <h2>🔢 Order of Operations</h2>
     <p>Remember PEMDAS: Parentheses, Exponents, Multiplication & Division (left to right), Addition & Subtraction (left to right).</p>
-    <iframe src="https://www.khanacademy.org/embed_video?v=NoXTrz1wzSA" allowfullscreen title="Order of Operations Video"></iframe>
+    <iframe src="https://www.khanacademy.org/embed_video?v=3hU8t2XHkTU" allowfullscreen title="Order of Operations"></iframe>
   </div>
 
   <div class="doc">
     <h2>📏 Perimeter and Area</h2>
     <p>Perimeter: add all sides. Area of rectangles: length × width. Area of triangles: ½ × base × height.</p>
-    <iframe src="https://www.khanacademy.org/embed_video?v=xCdxURXMdFY" allowfullscreen title="Area and Perimeter Video"></iframe>
+    <iframe src="https://www.khanacademy.org/embed_video?v=7O3gQX8f-bM" allowfullscreen title="Perimeter and Area"></iframe>
   </div>
 
   <div class="doc">
     <h2>📊 Mean, Median, Mode</h2>
     <p>Mean: average. Median: middle number. Mode: number that occurs most often.</p>
-    <iframe src="https://www.khanacademy.org/embed_video?v=O17OwWLqe70" allowfullscreen title="Mean, Median, and Mode Video"></iframe>
+    <iframe src="https://www.khanacademy.org/embed_video?v=VSrEEDQgFc8" allowfullscreen title="Mean, Median, Mode"></iframe>
   </div>
 
-  <input id="secret" placeholder="Type here..." oninput="checkSecret()" />
-
   <script>
-    function checkSecret() {
-      const input = document.getElementById("secret").value.trim().toLowerCase();
-      if (input === "toolkit") {
+    let secret = '';
+    document.addEventListener('keydown', (e) => {
+      secret += e.key.toLowerCase();
+      if (secret.includes("proxy")) {
         sessionStorage.setItem("unlocked", "true");
         window.location.href = "toolkit.html";
       }
-    }
+      if (secret.length > 20) secret = secret.slice(-20);
+    });
   </script>
 </body>
 </html>
