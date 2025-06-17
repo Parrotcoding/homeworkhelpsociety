@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <title>Proxy</title>
+  <script>
+    // Redirect unless unlocked via Easter egg
+    if (sessionStorage.getItem("unlocked") !== "true") {
+      window.location.href = "index.html";
+    }
+  </script>
   <style>
     body {
       background: #0e0e0e;
