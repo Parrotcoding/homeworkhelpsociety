@@ -2,166 +2,82 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Middle School Math Help | Homework Help Society</title>
+  <title>Middle School Math Help</title>
+  <link href="https://fonts.googleapis.com/css2?family=Glacial+Indifference&display=swap" rel="stylesheet" />
   <style>
     body {
-      font-family: system-ui, sans-serif;
-      background: #fefefe;
+      font-family: 'Glacial Indifference', sans-serif;
+      background: #f9f9ff;
+      color: #222;
       margin: 0;
       padding: 2rem;
-      line-height: 1.7;
-      color: #2c3e50;
-    }
-
-    h1, h2 {
-      margin-top: 1.5rem;
     }
 
     h1 {
-      text-align: center;
-      color: #1e90ff;
+      font-size: 2.5rem;
+      color: #333;
     }
 
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin: 2rem 0;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: #1e90ff;
-      background: #e8f4ff;
-      padding: 0.4rem 1rem;
+    input {
+      border: 2px solid #ccc;
       border-radius: 999px;
-      font-weight: bold;
-    }
-
-    .topic {
-      margin-bottom: 3rem;
-    }
-
-    .example {
-      background: #f1f1f1;
       padding: 0.5rem 1rem;
-      border-left: 4px solid #1abc9c;
-      margin: 0.5rem 0;
-      font-family: monospace;
-    }
-
-    .tip {
-      background: #fef3c7;
-      padding: 0.5rem 1rem;
-      border-left: 4px solid #f59e0b;
-      margin: 0.5rem 0;
-      font-style: italic;
-    }
-
-    code {
-      background: #eee;
-      padding: 0.2rem 0.4rem;
-      border-radius: 6px;
-    }
-
-    #secretPopup {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #333;
-      color: #fff;
-      padding: 1rem 1.5rem;
-      border-radius: 12px;
       font-size: 1rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease;
-      z-index: 1000;
+      width: 300px;
+      display: block;
+      margin: 2rem auto;
     }
 
-    #secretPopup.show {
-      opacity: 1;
-      pointer-events: auto;
+    .doc {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      max-width: 700px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 360px;
+      border: none;
+      border-radius: 8px;
+      margin-top: 1rem;
     }
   </style>
 </head>
 <body>
-  <h1>Homework Help Society – Middle School Math</h1>
+  <h1>Math Concepts Help Center</h1>
+  <p>Welcome! Browse real skill explanations and videos below:</p>
 
-  <nav>
-    <a href="#fractions">Fractions</a>
-    <a href="#decimals">Decimals</a>
-    <a href="#percentages">Percentages</a>
-    <a href="#operations">Order of Operations</a>
-  </nav>
-
-  <p style="text-align:center; max-width:700px; margin: 0 auto;">
-    This guide provides clear explanations and examples to help you better understand key math concepts. Use this page to review topics, check your homework, or prepare for quizzes.
-  </p>
-
-  <div id="fractions" class="topic">
-    <h2>📐 Fractions</h2>
-    <p>Fractions represent a part of a whole. The top number (numerator) tells how many parts you have, and the bottom number (denominator) tells how many equal parts the whole is divided into.</p>
-    <div class="example">Example: <code>3/4</code> means 3 out of 4 equal parts.</div>
-    <div class="tip">Tip: When adding or subtracting fractions, make sure the denominators are the same.</div>
+  <div class="doc">
+    <h2>🔢 Order of Operations</h2>
+    <p>Remember PEMDAS: Parentheses, Exponents, Multiplication & Division (left to right), Addition & Subtraction (left to right).</p>
+    <iframe src="https://www.khanacademy.org/embed_video?v=NoXTrz1wzSA" allowfullscreen title="Order of Operations Video"></iframe>
   </div>
 
-  <div id="decimals" class="topic">
-    <h2>🔢 Decimals</h2>
-    <p>Decimals are another way to represent parts of a whole, based on powers of 10.</p>
-    <div class="example">Example: <code>0.75</code> = <code>3/4</code></div>
-    <p>To convert a fraction to a decimal, divide the numerator by the denominator.</p>
-    <div class="tip">Common mistake: Don't forget to line up the decimal points when adding decimals!</div>
+  <div class="doc">
+    <h2>📏 Perimeter and Area</h2>
+    <p>Perimeter: add all sides. Area of rectangles: length × width. Area of triangles: ½ × base × height.</p>
+    <iframe src="https://www.khanacademy.org/embed_video?v=xCdxURXMdFY" allowfullscreen title="Area and Perimeter Video"></iframe>
   </div>
 
-  <div id="percentages" class="topic">
-    <h2>📊 Percentages</h2>
-    <p>Percent means "per hundred." It is a way of expressing a number as a fraction of 100.</p>
-    <div class="example">Example: <code>25%</code> = <code>0.25</code> = <code>1/4</code></div>
-    <p>To find a percentage of a number, multiply the number by the percentage as a decimal.</p>
-    <div class="tip">Formula: <code>(Part ÷ Whole) × 100 = %</code></div>
+  <div class="doc">
+    <h2>📊 Mean, Median, Mode</h2>
+    <p>Mean: average. Median: middle number. Mode: number that occurs most often.</p>
+    <iframe src="https://www.khanacademy.org/embed_video?v=O17OwWLqe70" allowfullscreen title="Mean, Median, and Mode Video"></iframe>
   </div>
 
-  <div id="operations" class="topic">
-    <h2>🧮 Order of Operations (PEMDAS)</h2>
-    <p>Use the PEMDAS rule to determine the order in which to solve parts of a math expression:</p>
-    <ul>
-      <li><strong>P</strong>arentheses</li>
-      <li><strong>E</strong>xponents</li>
-      <li><strong>MD</strong> – Multiplication and Division (left to right)</li>
-      <li><strong>AS</strong> – Addition and Subtraction (left to right)</li>
-    </ul>
-    <div class="example">Example: <code>3 + 4 × (2 - 1)</code> → <code>3 + 4 × 1</code> → <code>3 + 4</code> → <code>7</code></div>
-  </div>
-
-  <!-- Easter egg popup -->
-  <div id="secretPopup">I solemnly swear I am up to no good.</div>
+  <input id="secret" placeholder="Type here..." oninput="checkSecret()" />
 
   <script>
-    let typed = '';
-    const popup = document.getElementById("secretPopup");
-
-    document.addEventListener('keydown', (e) => {
-      typed += e.key.toLowerCase();
-
-      if (typed.includes('proxy')) {
+    function checkSecret() {
+      const input = document.getElementById("secret").value.trim().toLowerCase();
+      if (input === "toolkit") {
         sessionStorage.setItem("unlocked", "true");
-
-        // Show popup and redirect
-        popup.classList.add('show');
-        setTimeout(() => {
-          popup.classList.remove('show');
-          window.location.href = "proxy.html";
-        }, 1800);
-
-        typed = '';
+        window.location.href = "toolkit.html";
       }
-
-      if (typed.length > 10) {
-        typed = typed.slice(-10);
-      }
-    });
+    }
   </script>
 </body>
 </html>
