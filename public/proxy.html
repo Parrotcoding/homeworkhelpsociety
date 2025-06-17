@@ -33,7 +33,7 @@
       text-align: center;
       max-width: 600px;
       color: #bbbbff;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
 
     form {
@@ -70,25 +70,30 @@
       background: #a636dc;
     }
 
-    .widgets {
+    .bookmark-bar {
       display: flex;
-      gap: 1rem;
+      gap: 0.5rem;
       flex-wrap: wrap;
       justify-content: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 1rem;
+      background: #200040;
+      border-radius: 16px;
+      box-shadow: 0 0 10px #55007766;
     }
 
-    .widget-btn {
-      padding: 0.6rem 1.2rem;
+    .bookmark {
       background: #2a003f;
       color: #ffffff;
       border: 2px solid #660099;
       border-radius: 999px;
+      padding: 0.4rem 1rem;
+      font-size: 0.95rem;
       cursor: pointer;
-      transition: background 0.2s, border 0.2s;
+      transition: background 0.2s, border-color 0.2s;
     }
 
-    .widget-btn:hover {
+    .bookmark:hover {
       background: #3c0066;
       border-color: #aa00ff;
     }
@@ -111,7 +116,7 @@
     .top-bar {
       background: #1e0030;
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       align-items: center;
       padding: 0.5rem 1rem;
     }
@@ -129,6 +134,41 @@
     .open-tab:hover {
       background: #5a00a3;
     }
+
+    .manage-btn {
+      font-size: 0.8rem;
+      background: #222;
+      border: 1px solid #555;
+      margin-bottom: 1rem;
+    }
+
+    #bookmarkModal {
+      background: #1c002b;
+      border: 2px solid #660099;
+      color: white;
+      padding: 1rem;
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 12px;
+      display: none;
+      z-index: 999;
+    }
+
+    #bookmarkModal h2 {
+      margin-top: 0;
+    }
+
+    #bookmarkList button {
+      background: #600;
+      border: none;
+      border-radius: 999px;
+      padding: 0.2rem 0.6rem;
+      color: white;
+      margin-left: 0.5rem;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -138,46 +178,134 @@
   </p>
 
   <form onsubmit="loadProxy(); return false;">
-    <input id="urlInput" placeholder="Enter website or keywords..." />
+    <input id="urlInput" placeholder="Enter URL or DuckDuckGo search..." />
     <button type="submit">Launch</button>
   </form>
 
-  <div class="widgets">
-    <button class="widget-btn" onclick="loadProxy('https://ubg98.github.io')">🕹️ UBG98</button>
-    <button class="widget-btn" onclick="loadProxy('https://now.gg')">📱 Now.gg</button>
-    <button class="widget-btn" onclick="loadProxy('https://kdata1.com/2020/05/slope/')">🏔️ Slope</button>
-    <button class="widget-btn" onclick="loadProxy('https://2048game.com/')">🔢 2048</button>
-  </div>
+  <div class="bookmark-bar" id="bookmarkBar"></div>
+  <button class="manage-btn" onclick="showBookmarks()">📂 Manage Bookmarks</button>
 
   <div class="preview-container" id="previewSection" style="display:none;">
     <div class="top-bar">
+      <span>Preview</span>
       <a href="#" id="openNewTab" class="open-tab" target="_blank">🔗 Open in New Tab</a>
     </div>
     <iframe id="proxyFrame"></iframe>
   </div>
 
+  <div id="bookmarkModal">
+    <h2>Bookmarks</h2>
+    <ul id="bookmarkList"></ul>
+    <button onclick="closeBookmarks()">Close</button>
+  </div>
+
   <script>
+    function getBookmarks() {
+      try {
+        return JSON.parse(decodeURIComponent(document.cookie.split('; ').find(row => row.startsWith('bookmarks='))?.split('=')[1] || '[]'));
+      } catch {
+        return [];
+      }
+    }
+
+    function saveBookmarks(bm) {
+      document.cookie = 'bookmarks=' + encodeURIComponent(JSON.stringify(bm)) + ';path=/;max-age=31536000';
+    }
+
+    function renderBookmarks() {
+      const container = document.getElementById('bookmarkBar');
+      const bookmarks = getBookmarks();
+      container.innerHTML = '';
+      bookmarks.forEach(url => {
+        const btn = document.createElement('button');
+        btn.className = 'bookmark';
+        btn.textContent = new URL(url).hostname;
+        btn.onclick = () => loadProxy(url);
+        container.appendChild(btn);
+      });
+    }
+
+    function showBookmarks() {
+      const modal = document.getElementById('bookmarkModal');
+      const list = document.getElementById('bookmarkList');
+      const bookmarks = getBookmarks();
+      list.innerHTML = '';
+      bookmarks.forEach((url, i) => {
+        const li = document.createElement('li');
+        li.textContent = url;
+        const del = document.createElement('button');
+        del.textContent = '✕';
+        del.onclick = () => {
+          bookmarks.splice(i, 1);
+          saveBookmarks(bookmarks);
+          renderBookmarks();
+          showBookmarks();
+        };
+        li.appendChild(del);
+        list.appendChild(li);
+      });
+      modal.style.display = 'block';
+    }
+
+    function closeBookmarks() {
+      document.getElementById('bookmarkModal').style.display = 'none';
+    }
+
     function loadProxy(targetUrl = null) {
       let input = targetUrl || document.getElementById('urlInput').value.trim();
       if (!input) return;
 
-      let openInIframe = true;
-      const isGoogleSearch = !/^https?:\/\//i.test(input) && !input.includes(".");
-      
-      if (isGoogleSearch) {
-        const searchUrl = "https://www.google.com/search?q=" + encodeURIComponent(input);
-        window.open(searchUrl, "_blank");
-        return;
-      }
-
-      if (!/^https?:\/\//i.test(input)) {
+      const isSearch = !/^https?:\/\//i.test(input) && !input.includes(".");
+      if (isSearch) {
+        input = "https://duckduckgo.com/?q=" + encodeURIComponent(input);
+      } else if (!/^https?:\/\//i.test(input)) {
         input = "https://" + input;
       }
 
-      document.getElementById('proxyFrame').src = "/proxy?url=" + encodeURIComponent(input);
-      document.getElementById('openNewTab').href = input;
-      document.getElementById('previewSection').style.display = "block";
+      const win = window.open('about:blank');
+      win.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Proxy Shell</title>
+          <style>
+            body { background: #0d0d0d; margin: 0; font-family: sans-serif; color: white; display: flex; flex-direction: column; align-items: center; }
+            form { margin: 20px; display: flex; gap: 8px; }
+            input, button { padding: 0.6rem 1rem; border-radius: 999px; border: none; }
+            input { width: 300px; }
+            iframe { border: none; width: 100vw; height: 100vh; flex-grow: 1; }
+          </style>
+        </head>
+        <body>
+          <form onsubmit="loadNewURL(); return false;">
+            <input id="urlBar" placeholder="Enter URL..." />
+            <button type="submit">Go</button>
+            <button onclick="addBookmark()">⭐</button>
+          </form>
+          <iframe id="proxyFrame" src="/proxy?url=${encodeURIComponent(input)}"></iframe>
+          <script>
+            function loadNewURL() {
+              let u = document.getElementById('urlBar').value.trim();
+              if (!/^https?:\\/\\//i.test(u)) u = "https://" + u;
+              document.getElementById('proxyFrame').src = "/proxy?url=" + encodeURIComponent(u);
+            }
+            function addBookmark() {
+              let u = document.getElementById('proxyFrame').src.split('=')[1];
+              u = decodeURIComponent(u);
+              let b = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+              if (!b.includes(u)) b.push(u);
+              document.cookie = "bookmarks=" + encodeURIComponent(JSON.stringify(b)) + ";path=/;max-age=31536000";
+              alert("Bookmark added!");
+            }
+            document.getElementById('urlBar').value = "${input}";
+          <\/script>
+        </body>
+        </html>
+      `);
+      win.document.close();
     }
+
+    renderBookmarks();
   </script>
 </body>
 </html>
