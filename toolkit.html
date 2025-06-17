@@ -2,307 +2,169 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Homework Research Toolkit</title>
-  <script>
-    if (sessionStorage.getItem("unlocked") !== "true") {
-      window.location.href = "index.html";
-    }
-  </script>
-  <link href="https://fonts.googleapis.com/css2?family=Glacial+Indifference&display=swap" rel="stylesheet" />
+  <title>Homework Toolkit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Glacial+Indifference&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       font-family: 'Glacial Indifference', sans-serif;
-      background: linear-gradient(135deg, #1c002b, #3a0066);
-      color: #e0e0ff;
+      background: linear-gradient(to bottom right, #2c003e, #1b002d);
+      color: white;
+    }
+
+    header {
+      padding: 1rem;
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      padding: 2rem;
-      min-height: 100vh;
+      background: rgba(0, 0, 0, 0.3);
     }
 
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-      text-shadow: 0 0 10px #9b5de5;
-    }
-
-    p.disclaimer {
-      font-size: 0.8rem;
-      text-align: center;
-      max-width: 600px;
-      color: #bbbbff;
-      margin-bottom: 1.5rem;
-    }
-
-    form {
+    #searchForm {
       display: flex;
       gap: 0.5rem;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-      justify-content: center;
+      flex-grow: 1;
+    }
+
+    input, button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.6rem 1rem;
+      font-size: 1rem;
     }
 
     input {
-      padding: 0.7rem 1rem;
-      border: none;
-      border-radius: 999px;
-      width: 300px;
-      font-size: 1rem;
-      background: #2a003f;
-      color: #fff;
-      outline: none;
+      flex: 1;
+      min-width: 250px;
     }
 
     button {
-      padding: 0.7rem 1.2rem;
-      border: none;
-      border-radius: 999px;
-      font-size: 1rem;
-      background: #8e05c2;
-      color: #fff;
+      background-color: white;
+      color: #2c003e;
+      font-weight: bold;
       cursor: pointer;
-      transition: background 0.2s ease;
-    }
-
-    button:hover {
-      background: #a636dc;
     }
 
     .bookmark-bar {
       display: flex;
-      gap: 0.5rem;
       flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 1.5rem;
-      padding: 0.5rem 1rem;
-      background: #200040;
-      border-radius: 16px;
-      box-shadow: 0 0 10px #55007766;
+      padding: 0.5rem;
+      gap: 0.5rem;
     }
 
     .bookmark {
-      background: #2a003f;
-      color: #ffffff;
-      border: 2px solid #660099;
+      background: white;
+      color: #2c003e;
+      padding: 0.4rem 0.8rem;
       border-radius: 999px;
-      padding: 0.4rem 1rem;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: background 0.2s, border-color 0.2s;
-    }
-
-    .bookmark:hover {
-      background: #3c0066;
-      border-color: #aa00ff;
-    }
-
-    .preview-container {
-      width: 100%;
-      max-width: 1000px;
-      background: #000;
-      border-radius: 12px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    iframe {
-      width: 100%;
-      height: 70vh;
-      border: none;
-    }
-
-    .top-bar {
-      background: #1e0030;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.5rem 1rem;
-    }
-
-    .open-tab {
-      color: #ccc;
       text-decoration: none;
-      font-size: 0.9rem;
-      border-radius: 999px;
-      background: #3d006e;
-      padding: 0.3rem 0.8rem;
-      transition: background 0.2s;
+      font-weight: bold;
     }
 
-    .open-tab:hover {
-      background: #5a00a3;
-    }
-
-    .manage-btn {
-      font-size: 0.8rem;
-      background: #222;
-      border: 1px solid #555;
-      margin-bottom: 1rem;
-    }
-
-    #bookmarkModal {
-      background: #1c002b;
-      border: 2px solid #660099;
-      color: white;
-      padding: 1rem;
-      position: fixed;
-      top: 20%;
-      left: 50%;
-      transform: translateX(-50%);
-      border-radius: 12px;
-      display: none;
-      z-index: 999;
-    }
-
-    #bookmarkModal h2 {
-      margin-top: 0;
-    }
-
-    #bookmarkList button {
-      background: #600;
+    #iframePreview {
+      width: 100%;
+      height: 85vh;
       border: none;
-      border-radius: 999px;
-      padding: 0.2rem 0.6rem;
-      color: white;
-      margin-left: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    #openNewTab {
+      margin-left: 1rem;
       cursor: pointer;
+      font-size: 1.2rem;
+      color: white;
+    }
+
+    #manageBtn {
+      background: none;
+      color: white;
+      border: 1px solid white;
+      border-radius: 999px;
+      padding: 0.4rem 0.8rem;
+      cursor: pointer;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
-  <h1>Homework Research Toolkit</h1>
-  <p class="disclaimer">
-    A utility for previewing resources and managing saved study tools. Use responsibly.
-  </p>
-
-  <form onsubmit="loadToolkit(); return false;">
-    <input id="urlInput" placeholder="Enter URL or DuckDuckGo search..." />
-    <button type="submit">Preview</button>
-  </form>
+  <header>
+    <form id="searchForm">
+      <input type="text" id="urlInput" placeholder="Enter site or search term..." />
+      <button type="submit">Go</button>
+      <span id="openNewTab" title="Open in new tab">↗</span>
+    </form>
+    <button id="manageBtn" onclick="manageBookmarks()">Manage Bookmarks</button>
+  </header>
 
   <div class="bookmark-bar" id="bookmarkBar"></div>
-  <button class="manage-btn" onclick="showBookmarks()">📂 Manage Resources</button>
-
-  <div class="preview-container" id="previewSection" style="display:none;">
-    <div class="top-bar">
-      <span>Preview</span>
-      <a href="#" id="openNewTab" class="open-tab" target="_blank">🔗 Open in New Tab</a>
-    </div>
-    <iframe id="toolkitFrame"></iframe>
-  </div>
-
-  <div id="bookmarkModal">
-    <h2>Saved Resources</h2>
-    <ul id="bookmarkList"></ul>
-    <button onclick="closeBookmarks()">Close</button>
-  </div>
+  <iframe id="iframePreview"></iframe>
 
   <script>
+    const input = document.getElementById('urlInput');
+    const form = document.getElementById('searchForm');
+    const iframe = document.getElementById('iframePreview');
+    const openNewTab = document.getElementById('openNewTab');
+    const bookmarkBar = document.getElementById('bookmarkBar');
+
     function getBookmarks() {
-      try {
-        return JSON.parse(decodeURIComponent(document.cookie.split('; ').find(row => row.startsWith('bookmarks='))?.split('=')[1] || '[]'));
-      } catch {
-        return [];
-      }
+      const cookies = document.cookie.split('; ').find(row => row.startsWith('bookmarks='));
+      return cookies ? JSON.parse(decodeURIComponent(cookies.split('=')[1])) : [];
     }
 
-    function saveBookmarks(bm) {
-      document.cookie = 'bookmarks=' + encodeURIComponent(JSON.stringify(bm)) + ';path=/;max-age=31536000';
+    function saveBookmarks(bookmarks) {
+      document.cookie = "bookmarks=" + encodeURIComponent(JSON.stringify(bookmarks)) + "; path=/; max-age=31536000";
     }
 
     function renderBookmarks() {
-      const container = document.getElementById('bookmarkBar');
-      const bookmarks = getBookmarks();
-      container.innerHTML = '';
-      bookmarks.forEach(url => {
-        const btn = document.createElement('button');
-        btn.className = 'bookmark';
-        btn.textContent = new URL(url).hostname;
-        btn.onclick = () => loadToolkit(url);
-        container.appendChild(btn);
+      bookmarkBar.innerHTML = '';
+      getBookmarks().forEach((b, i) => {
+        const link = document.createElement('a');
+        link.href = "#";
+        link.className = 'bookmark';
+        link.textContent = b.title;
+        link.onclick = () => loadURL(b.url);
+        bookmarkBar.appendChild(link);
       });
     }
 
-    function showBookmarks() {
-      const modal = document.getElementById('bookmarkModal');
-      const list = document.getElementById('bookmarkList');
+    function addBookmark(title, url) {
       const bookmarks = getBookmarks();
-      list.innerHTML = '';
-      bookmarks.forEach((url, i) => {
-        const li = document.createElement('li');
-        li.textContent = url;
-        const del = document.createElement('button');
-        del.textContent = '✕';
-        del.onclick = () => {
-          bookmarks.splice(i, 1);
-          saveBookmarks(bookmarks);
-          renderBookmarks();
-          showBookmarks();
-        };
-        li.appendChild(del);
-        list.appendChild(li);
-      });
-      modal.style.display = 'block';
+      bookmarks.push({ title, url });
+      saveBookmarks(bookmarks);
+      renderBookmarks();
     }
 
-    function closeBookmarks() {
-      document.getElementById('bookmarkModal').style.display = 'none';
-    }
-
-    function loadToolkit(targetUrl = null) {
-      let input = targetUrl || document.getElementById('urlInput').value.trim();
-      if (!input) return;
-
-      const isSearch = !/^https?:\/\//i.test(input) && !input.includes(".");
-      if (isSearch) {
-        input = "https://duckduckgo.com/?q=" + encodeURIComponent(input);
-      } else if (!/^https?:\/\//i.test(input)) {
-        input = "https://" + input;
+    function manageBookmarks() {
+      const bookmarks = getBookmarks();
+      const names = bookmarks.map((b, i) => `${i + 1}. ${b.title}`).join('\n');
+      const toDelete = prompt("Bookmarks:\n" + names + "\n\nEnter number to delete:");
+      const index = parseInt(toDelete) - 1;
+      if (!isNaN(index) && bookmarks[index]) {
+        bookmarks.splice(index, 1);
+        saveBookmarks(bookmarks);
+        renderBookmarks();
       }
+    }
 
-      const win = window.open('about:blank');
-      win.document.write(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>Resource Viewer</title>
-          <style>
-            body { background: #0d0d0d; margin: 0; font-family: sans-serif; color: white; display: flex; flex-direction: column; align-items: center; }
-            form { margin: 20px; display: flex; gap: 8px; }
-            input, button { padding: 0.6rem 1rem; border-radius: 999px; border: none; }
-            input { width: 300px; }
-            iframe { border: none; width: 100vw; height: 100vh; flex-grow: 1; }
-          </style>
-        </head>
-        <body>
-          <form onsubmit="loadNewURL(); return false;">
-            <input id="urlBar" placeholder="Enter URL..." />
-            <button type="submit">Go</button>
-            <button onclick="addBookmark()">⭐</button>
-          </form>
-          <iframe id="toolkitFrame" src="/redirect?q=${encodeURIComponent(input)}"></iframe>
-          <script>
-            function loadNewURL() {
-              let u = document.getElementById('urlBar').value.trim();
-              if (!/^https?:\\/\\//i.test(u)) u = "https://" + u;
-              document.getElementById('toolkitFrame').src = "/redirect?q=" + encodeURIComponent(u);
-            }
-            function addBookmark() {
-              let u = document.getElementById('toolkitFrame').src.split('=')[1];
-              u = decodeURIComponent(u);
-              let b = JSON.parse(localStorage.getItem('bookmarks') || '[]');
-              if (!b.includes(u)) b.push(u);
-              document.cookie = "bookmarks=" + encodeURIComponent(JSON.stringify(b)) + ";path=/;max-age=31536000";
-              alert("Resource saved!");
-            }
-            document.getElementById('urlBar').value = "${input}";
-          <\/script>
-        </body>
-        </html>
-      `);
-      win.document.close();
+    function loadURL(url) {
+      const formatted = url.startsWith('http') ? url : "https://www.startpage.com/sp/search?q=" + encodeURIComponent(url);
+      iframe.src = formatted;
+      openNewTab.onclick = () => window.open(formatted, '_blank');
+    }
+
+    form.onsubmit = e => {
+      e.preventDefault();
+      const val = input.value.trim();
+      if (val) loadURL(val);
+    };
+
+    // Optional: show ⭐ if inside about:blank or embedded
+    if (window !== window.parent) {
+      const star = document.createElement('button');
+      star.textContent = '⭐';
+      star.style = 'position:fixed;top:1rem;right:1rem;padding:0.5rem 1rem;font-size:1.2rem;border-radius:999px;border:none;background:white;color:#2c003e;font-weight:bold;';
+      star.onclick = () => addBookmark(document.title || "Untitled", window.location.href);
+      document.body.appendChild(star);
     }
 
     renderBookmarks();
