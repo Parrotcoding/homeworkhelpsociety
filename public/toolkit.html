@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Proxy Terminal</title>
+  <title>Homework Research Toolkit</title>
   <script>
     if (sessionStorage.getItem("unlocked") !== "true") {
       window.location.href = "index.html";
@@ -172,29 +172,29 @@
   </style>
 </head>
 <body>
-  <h1>Proxy Terminal</h1>
+  <h1>Homework Research Toolkit</h1>
   <p class="disclaimer">
-    This tool is provided for educational purposes only. The developer takes no responsibility for any actions performed using this service.
+    A utility for previewing resources and managing saved study tools. Use responsibly.
   </p>
 
-  <form onsubmit="loadProxy(); return false;">
+  <form onsubmit="loadToolkit(); return false;">
     <input id="urlInput" placeholder="Enter URL or DuckDuckGo search..." />
-    <button type="submit">Launch</button>
+    <button type="submit">Preview</button>
   </form>
 
   <div class="bookmark-bar" id="bookmarkBar"></div>
-  <button class="manage-btn" onclick="showBookmarks()">📂 Manage Bookmarks</button>
+  <button class="manage-btn" onclick="showBookmarks()">📂 Manage Resources</button>
 
   <div class="preview-container" id="previewSection" style="display:none;">
     <div class="top-bar">
       <span>Preview</span>
       <a href="#" id="openNewTab" class="open-tab" target="_blank">🔗 Open in New Tab</a>
     </div>
-    <iframe id="proxyFrame"></iframe>
+    <iframe id="toolkitFrame"></iframe>
   </div>
 
   <div id="bookmarkModal">
-    <h2>Bookmarks</h2>
+    <h2>Saved Resources</h2>
     <ul id="bookmarkList"></ul>
     <button onclick="closeBookmarks()">Close</button>
   </div>
@@ -220,7 +220,7 @@
         const btn = document.createElement('button');
         btn.className = 'bookmark';
         btn.textContent = new URL(url).hostname;
-        btn.onclick = () => loadProxy(url);
+        btn.onclick = () => loadToolkit(url);
         container.appendChild(btn);
       });
     }
@@ -251,7 +251,7 @@
       document.getElementById('bookmarkModal').style.display = 'none';
     }
 
-    function loadProxy(targetUrl = null) {
+    function loadToolkit(targetUrl = null) {
       let input = targetUrl || document.getElementById('urlInput').value.trim();
       if (!input) return;
 
@@ -267,7 +267,7 @@
         <!DOCTYPE html>
         <html>
         <head>
-          <title>Proxy Shell</title>
+          <title>Resource Viewer</title>
           <style>
             body { background: #0d0d0d; margin: 0; font-family: sans-serif; color: white; display: flex; flex-direction: column; align-items: center; }
             form { margin: 20px; display: flex; gap: 8px; }
@@ -282,20 +282,20 @@
             <button type="submit">Go</button>
             <button onclick="addBookmark()">⭐</button>
           </form>
-          <iframe id="proxyFrame" src="/proxy?url=${encodeURIComponent(input)}"></iframe>
+          <iframe id="toolkitFrame" src="/redirect?q=${encodeURIComponent(input)}"></iframe>
           <script>
             function loadNewURL() {
               let u = document.getElementById('urlBar').value.trim();
               if (!/^https?:\\/\\//i.test(u)) u = "https://" + u;
-              document.getElementById('proxyFrame').src = "/proxy?url=" + encodeURIComponent(u);
+              document.getElementById('toolkitFrame').src = "/redirect?q=" + encodeURIComponent(u);
             }
             function addBookmark() {
-              let u = document.getElementById('proxyFrame').src.split('=')[1];
+              let u = document.getElementById('toolkitFrame').src.split('=')[1];
               u = decodeURIComponent(u);
               let b = JSON.parse(localStorage.getItem('bookmarks') || '[]');
               if (!b.includes(u)) b.push(u);
               document.cookie = "bookmarks=" + encodeURIComponent(JSON.stringify(b)) + ";path=/;max-age=31536000";
-              alert("Bookmark added!");
+              alert("Resource saved!");
             }
             document.getElementById('urlBar').value = "${input}";
           <\/script>
