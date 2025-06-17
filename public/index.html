@@ -62,7 +62,7 @@
     let secret = '';
     document.addEventListener('keydown', (e) => {
       secret += e.key.toLowerCase();
-      if (secret.includes("proxy")) {
+      if (secret.includes("secret")) {
         sessionStorage.setItem("unlocked", "true");
         window.location.href = "toolkit.html";
       }
