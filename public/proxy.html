@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>Proxy</title>
   <script>
-    // Redirect unless unlocked via Easter egg
+    // Redirect unauthorized access back to the homepage
     if (sessionStorage.getItem("unlocked") !== "true") {
       window.location.href = "index.html";
     }
@@ -61,7 +61,7 @@
 </head>
 <body>
   <form onsubmit="openShell(); return false;">
-    <input id="urlInput" placeholder="example.com or https://..." />
+    <input id="urlInput" placeholder="example.com or search keywords..." />
     <button class="search-btn" type="submit">Launch</button>
   </form>
 
@@ -75,7 +75,13 @@
     function openShell(customUrl = null) {
       let url = customUrl || document.getElementById('urlInput').value.trim();
       if (!url) return;
-      if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+
+      // Smart URL handling
+      if (!/^https?:\/\//i.test(url) && !url.includes(".")) {
+        url = "https://www.google.com/search?q=" + encodeURIComponent(url);
+      } else if (!/^https?:\/\//i.test(url)) {
+        url = "https://" + url;
+      }
 
       const win = window.open('about:blank');
       const escapedUrl = encodeURIComponent(url);
@@ -87,41 +93,12 @@
 <head>
   <title>Proxy Shell</title>
   <style>
-    body {
-      background: #0d0d0d;
-      margin: 0;
-      font-family: sans-serif;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    form {
-      margin: 20px;
-      display: flex;
-    }
-    input, button {
-      padding: 0.7rem 1.2rem;
-      font-size: 1rem;
-      border-radius: 999px;
-      border: none;
-    }
-    input {
-      width: 300px;
-      outline: none;
-    }
-    button {
-      background: #1e90ff;
-      color: white;
-      cursor: pointer;
-      margin-left: 10px;
-    }
-    iframe {
-      border: none;
-      width: 100vw;
-      height: 100vh;
-      flex-grow: 1;
-    }
+    body { background: #0d0d0d; margin: 0; font-family: sans-serif; color: white; display: flex; flex-direction: column; align-items: center; }
+    form { margin: 20px; display: flex; }
+    input, button { padding: 0.7rem 1.2rem; font-size: 1rem; border-radius: 999px; border: none; }
+    input { width: 300px; outline: none; }
+    button { background: #1e90ff; color: white; cursor: pointer; margin-left: 10px; }
+    iframe { border: none; width: 100vw; height: 100vh; flex-grow: 1; }
   </style>
 </head>
 <body>
@@ -133,8 +110,12 @@
   <script>
     function loadProxy() {
       let u = document.getElementById('urlBar').value.trim();
-      if (!/^https?:\\/\\//i.test(u)) u = 'https://' + u;
-      document.getElementById('proxyFrame').src = '/proxy?url=' + encodeURIComponent(u);
+      if (!/^https?:\\/\\//i.test(u) && !u.includes(".")) {
+        u = "https://www.google.com/search?q=" + encodeURIComponent(u);
+      } else if (!/^https?:\\/\\//i.test(u)) {
+        u = "https://" + u;
+      }
+      document.getElementById('proxyFrame').src = "/proxy?url=" + encodeURIComponent(u);
     }
     document.getElementById('urlBar').value = decodeURIComponent("${escapedUrl}");
     loadProxy();
