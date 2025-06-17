@@ -8,11 +8,11 @@
       window.location.href = "index.html";
     }
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Glacial+Indifference&display=swap" rel="stylesheet" />
   <style>
     body {
       margin: 0;
-      font-family: 'Orbitron', sans-serif;
+      font-family: 'Glacial Indifference', sans-serif;
       background: linear-gradient(135deg, #1c002b, #3a0066);
       color: #e0e0ff;
       display: flex;
@@ -40,6 +40,8 @@
       display: flex;
       gap: 0.5rem;
       margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     input {
@@ -91,13 +93,41 @@
       border-color: #aa00ff;
     }
 
-    iframe {
-      border: none;
+    .preview-container {
       width: 100%;
       max-width: 1000px;
-      height: 70vh;
-      border-radius: 12px;
       background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    iframe {
+      width: 100%;
+      height: 70vh;
+      border: none;
+    }
+
+    .top-bar {
+      background: #1e0030;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 0.5rem 1rem;
+    }
+
+    .open-tab {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.9rem;
+      border-radius: 999px;
+      background: #3d006e;
+      padding: 0.3rem 0.8rem;
+      transition: background 0.2s;
+    }
+
+    .open-tab:hover {
+      background: #5a00a3;
     }
   </style>
 </head>
@@ -113,28 +143,40 @@
   </form>
 
   <div class="widgets">
-    <button class="widget-btn" onclick="loadProxy('https://poki.com')">🎮 Poki</button>
     <button class="widget-btn" onclick="loadProxy('https://ubg98.github.io')">🕹️ UBG98</button>
     <button class="widget-btn" onclick="loadProxy('https://now.gg')">📱 Now.gg</button>
     <button class="widget-btn" onclick="loadProxy('https://kdata1.com/2020/05/slope/')">🏔️ Slope</button>
     <button class="widget-btn" onclick="loadProxy('https://2048game.com/')">🔢 2048</button>
   </div>
 
-  <iframe id="proxyFrame" title="Proxy Output"></iframe>
+  <div class="preview-container" id="previewSection" style="display:none;">
+    <div class="top-bar">
+      <a href="#" id="openNewTab" class="open-tab" target="_blank">🔗 Open in New Tab</a>
+    </div>
+    <iframe id="proxyFrame"></iframe>
+  </div>
 
   <script>
     function loadProxy(targetUrl = null) {
       let input = targetUrl || document.getElementById('urlInput').value.trim();
-
       if (!input) return;
 
-      if (!/^https?:\/\//i.test(input) && !input.includes('.')) {
-        input = "https://www.google.com/search?q=" + encodeURIComponent(input);
-      } else if (!/^https?:\/\//i.test(input)) {
+      let openInIframe = true;
+      const isGoogleSearch = !/^https?:\/\//i.test(input) && !input.includes(".");
+      
+      if (isGoogleSearch) {
+        const searchUrl = "https://www.google.com/search?q=" + encodeURIComponent(input);
+        window.open(searchUrl, "_blank");
+        return;
+      }
+
+      if (!/^https?:\/\//i.test(input)) {
         input = "https://" + input;
       }
 
       document.getElementById('proxyFrame').src = "/proxy?url=" + encodeURIComponent(input);
+      document.getElementById('openNewTab').href = input;
+      document.getElementById('previewSection').style.display = "block";
     }
   </script>
 </body>
